@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Updated Mar 19, 2013 by Yosi Birenbaum -->
+<xs:schema xmlns="http://com/exlibris/urm/repository/migration/license/xmlbeans" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com/exlibris/urm/repository/migration/license/xmlbeans" elementFormDefault="qualified" attributeFormDefault="unqualified" >
+	<xs:element name="license">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="license_details" type="license_details" minOccurs="1" />
+				<xs:element name="term_list" type="term_list" minOccurs="0" />
+				<xs:element name="note_list" type="note_list" minOccurs="0"/>
+				<xs:element name="attachment_list" type="attachment_list" minOccurs="0"/>
+				<xs:element name="negotiation_details_list" type="negotiation_details_list" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="license_details">
+		<xs:all>
+			<xs:element name="ownered_entity" type="ownered_entity" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Might be used for other entities referenced in this record.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="license_code" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>UNIQUE</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="license_name" type="xs:string" />
+			<xs:element name="license_status" minOccurs="1" default="ACTIVE">
+				<xs:annotation>
+					<xs:documentation>DRAFT, ACTIVE, DELETED, EXPIRED, RETIRED</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="DRAFT"/>
+						<xs:enumeration value="ACTIVE"/>
+						<xs:enumeration value="DELETED"/>
+						<xs:enumeration value="EXPIRED"/>
+						<xs:enumeration value="RETIRED"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="licensor_code" type="xs:string" minOccurs="0"><xs:annotation>
+				<xs:documentation>Licensor Vendor Code</xs:documentation>
+			</xs:annotation></xs:element>
+			<xs:element name="signed_by" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>User Original ID</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:element name="signed_on" type="formatted_date_dype" minOccurs="0"/>
+			<xs:element name="start_date" type="formatted_date_dype" minOccurs="1"/>
+			<xs:element name="end_date" type="formatted_date_dype" minOccurs="0" />
+			<xs:element name="location" type="xs:string" minOccurs="0"><xs:annotation>
+				<xs:documentation>Value taken from code table LicenseStorageLocation</xs:documentation>
+			</xs:annotation></xs:element>
+			<xs:element name="review_status" minOccurs="1" default="ACCEPTED">
+				<xs:annotation>
+					<xs:documentation>PENDING, ACCEPTED, REJECTED, INREVIEW</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="PENDING"/>
+						<xs:enumeration value="ACCEPTED"/>
+						<xs:enumeration value="REJECTED"/>
+						<xs:enumeration value="INREVIEW"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="URI" type="xs:string" minOccurs="0"/>
+					<xs:element name="type">
+				<xs:annotation>
+					<xs:documentation>LICENSE, ADDENDUM, NEGOTIATION</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="LICENSE"/>
+						<xs:enumeration value="ADDENDUM"/>
+						<xs:enumeration value="NEGOTIATION"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="parent_code" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>When populated, license will be considered as Amendment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="term_list">
+		<xs:sequence>
+			<xs:element name="term" type="term" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="term">
+		<xs:all>
+            <xs:annotation>
+					<xs:documentation>The term element should correspond to a line from Alma code table LicenseTermsAndTypes. The term_code should correspond to a code field of LicenseTermsAndTypes line. The term_value should be defined in according with corresponding codeValue field of LicenseTermsAndTypes line
+					</xs:documentation>
+			</xs:annotation>
+			<xs:element name="term_code" minOccurs="1" >
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="FAIRUSE"><xs:annotation><xs:documentation>Term description: Fair Use Clause. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ALLRIGHTS"><xs:annotation><xs:documentation>Term description: All Rights Reserved. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="DATAPROTOVERC"><xs:annotation><xs:documentation>Term description: Database Protection Override Clause. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CITREQD"><xs:annotation><xs:documentation>Term description: Citation Requirement Detail. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="DIGCOPY"><xs:annotation><xs:documentation>Term description: Digitally Copy. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="DIGCOPYN"><xs:annotation><xs:documentation>Term description: Digitally Copy Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PRINTCOPY"><xs:annotation><xs:documentation>Term description: Print Copy. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PRINTCOPYN"><xs:annotation><xs:documentation>Term description: Print Copy Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="SCHOLSHARE"><xs:annotation><xs:documentation>Term description: Scholarly Sharing. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="SCHOLSHAREN"><xs:annotation><xs:documentation>Term description: Scholarly Sharing Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="DISTANCE"><xs:annotation><xs:documentation>Term description: Distance Education. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="DISTANCEN"><xs:annotation><xs:documentation>Term description: Distance Education Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ILLPRINTFAX"><xs:annotation><xs:documentation>Term description: Interlibrary Loan Print or Fax. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ILLSET"><xs:annotation><xs:documentation>Term description: Interlibrary Loan Secure Electronic Transmission. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ILLELEC"><xs:annotation><xs:documentation>Term description: Interlibrary Loan Electronic. Acceptable term values: PERMITTED / PROHIBITED </xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ILLRKRI"><xs:annotation><xs:documentation>Term description: Interlibrary Loan Record Keeping Required Indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ILLN"><xs:annotation><xs:documentation>Term description: Interlibrary loan note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COURSERESPRINT"><xs:annotation><xs:documentation>Term description: Course Reserve Print. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COURSERES"><xs:annotation><xs:documentation>Term description: Course Reserve Electronic Copy. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COURSERESNOTE"><xs:annotation><xs:documentation>Term description: Course Reserve Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ELECLINK"><xs:annotation><xs:documentation>Term description: Electronic Link. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ELECLINKNOTE"><xs:annotation><xs:documentation>Term description: Electronic Link note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COURSEPACKPRINT"><xs:annotation><xs:documentation>Term description: Course Pack Print. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COURSEPACKELEC"><xs:annotation><xs:documentation>Term description: Course Pace Electronic. Acceptable term values: PERMITTED / PROHIBITED</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COURSEPACKN"><xs:annotation><xs:documentation>Term description: Course Pack Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="REMOTE"><xs:annotation><xs:documentation>Term description: Remote Access. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="WALKIN"><xs:annotation><xs:documentation>Term description: Walk in User Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONCURUSER"><xs:annotation><xs:documentation>Term description: Concurrent User. Acceptable term values: NUMERIC</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PCONCURUSER"><xs:annotation><xs:documentation>Term description: Pooled Concurrent Users. Acceptable term values: NUMERIC</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONCURUSERN"><xs:annotation><xs:documentation>Term description: Concurrent Users Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="OTHERUSERRSTRN"><xs:annotation><xs:documentation>Term description: Other User restriction note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="OTHERUSERSTRN"><xs:annotation><xs:documentation>Term description: Other Use restriction note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PERPETUAL"><xs:annotation><xs:documentation>Term description: Perpetual Access Right. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PERPETUALH"><xs:annotation><xs:documentation>Term description: Perpetual Access Holdings. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PERPETUALN"><xs:annotation><xs:documentation>Term description: Perpetual Access note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ARCHIVE"><xs:annotation><xs:documentation>Term description: Archiving right. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ARCHIVEFMT"><xs:annotation><xs:documentation>Term description: Archiving format. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ARCHIVEN"><xs:annotation><xs:documentation>Term description: Archiving note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="ACCESSIBILITY"><xs:annotation><xs:documentation>Term description: Accessibility compliance indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="COMPLETENESSI"><xs:annotation><xs:documentation>Term description: Completeness of Content clause indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONCURPRINTI"><xs:annotation><xs:documentation>Term description: Concurrency with print version clause indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="IPWARRI"><xs:annotation><xs:documentation>Term description: Intellectual property warranty indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONFUSERI"><xs:annotation><xs:documentation>Term description: Confidentiality of user information indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="UCITAOVERI"><xs:annotation><xs:documentation>Term description: UCITA Override Clause Indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CLICKWRAPI"><xs:annotation><xs:documentation>Term description: Clickwrap modification clause indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="INDEMLORC"><xs:annotation><xs:documentation>Term description: Indemnification by licensor clause. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="INDEMLEEC"><xs:annotation><xs:documentation>Term description: Indemnification by licensee clause. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="INDEMN"><xs:annotation><xs:documentation>Term description: Indemnification note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONFA"><xs:annotation><xs:documentation>Term description: Confidentiality of agreement. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONFAN"><xs:annotation><xs:documentation>Term description: Confidentiality of agreement note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="GOVLAW"><xs:annotation><xs:documentation>Term description: Governing law. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="GOVJUR"><xs:annotation><xs:documentation>Term description: Governing Jurisdiction. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="APPCLAW"><xs:annotation><xs:documentation>Term description: Applicable Copyright Law. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CUREBREACH"><xs:annotation><xs:documentation>Term description: Cure Period for Breach. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CONTWARR"><xs:annotation><xs:documentation>Term description: Content Warranty. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PERFWARRIND"><xs:annotation><xs:documentation>Term description: Performance Warranty Indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="PERFWARRUPTIME"><xs:annotation><xs:documentation>Term description: Performance Warranty Uptime Guarantee. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="MAINTWIN"><xs:annotation><xs:documentation>Term description: Maintenance Window. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="RENEWTYPE"><xs:annotation><xs:documentation>Term description: Renewal Type. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="NONRNOTICE"><xs:annotation><xs:documentation>Term description: Non-Renewal Notice Period. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LEETERMRIGHT"><xs:annotation><xs:documentation>Term description: Licensee Termination Right Indicator. Acceptable term values: YES / NO</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LEETERMCOND"><xs:annotation><xs:documentation>Term description: Licensee Termination Condition. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LEENOTICE"><xs:annotation><xs:documentation>Term description: Licensee Notice Period For Termination. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LORTERMRIGHT"><xs:annotation><xs:documentation>Term description: Licensor Termination Right Indicator. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LORTERMCON"><xs:annotation><xs:documentation>Term description: Licensor Termination Condition. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LORNOTICE"><xs:annotation><xs:documentation>Term description: Licensor Notice Period For Termination. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="TERMRIGHTN"><xs:annotation><xs:documentation>Term description: Termination Right Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="TERMREQS"><xs:annotation><xs:documentation>Term description: Termination Requirements. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="TERMREQSN"><xs:annotation><xs:documentation>Term description: Termination Requirements Note. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="AUTHUSERDEF"><xs:annotation><xs:documentation>Term description: Authorized User Definition. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LAUTHUSERDEF"><xs:annotation><xs:documentation>Term description: Local Authorized User Definition. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="CUREBREACHUOM"><xs:annotation><xs:documentation>Term description: Cure Period For Breach Unit Of Measure. Acceptable term values: CALENDARDAY / BUSINESSDAY / WEEK</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LEENOTICEUOM"><xs:annotation><xs:documentation>Term description: Licensee Notice Period For Termination Unit Of Measure. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="LORNOTICEUOM"><xs:annotation><xs:documentation>Term description: Licensor Notice Period For Termination Unit Of Measure. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						<xs:enumeration value="NONRNOTICEUOM"><xs:annotation><xs:documentation>Term description: Non-Renewal Notice Period Unit Of Measure. Acceptable term values: FREE-TEXT</xs:documentation></xs:annotation></xs:enumeration>
+						</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="term_value" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>4 options: YES / NO, PERMITTED / PROHIBITED,  CALENDARDAY / BUSINESSDAY / WEEK or free text - according to codeValue field of LicenseTermsAntTypes Alma code table</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="attachment_list">
+		<xs:sequence>
+			<xs:element name="attachment" type="attachment" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="attachment">
+		<xs:all>
+			<xs:element name="ownered_entity" type="ownered_entity"/>
+			<xs:element name="filename" type="xs:string" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>For license the attachment will be located in license/attachments/{license_code}.zip, under sequential folder. For negotiation_details the attachment will be located in license/negotiations/attachments/{license_code}_{member_code}.zip, under sequential folder.File name should be of format {unique_sequence_folder}/{filename}</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="notes" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="URL" type="xs:string" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ownered_entity"><xs:annotation>
+		<xs:documentation>Every entity in Alma has these DB fields. Non-mandatory. Does not effect functionality.</xs:documentation>
+	</xs:annotation>
+		<xs:all>
+			<xs:element name="creation_date" type="formatted_date_dype" minOccurs="0"/>
+			<xs:element name="modification_date" type="formatted_date_dype" minOccurs="0"/>
+			<xs:element name="created_by" type="xs:string" minOccurs="0"/>
+			<xs:element name="modified_by" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:simpleType name="formatted_date_dype">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[1-2][0-9][0-9][0-9][0-1][0-9][0-3][0-9]"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="negotiation_details_list">
+	    <xs:annotation>
+					<xs:documentation>When populated, license will be considered as NEGOTIATION</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="negotiation_details" type="negotiation_details" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="note_list">
+		<xs:sequence>
+			<xs:element name="note" type="note" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="note">
+		<xs:all>
+			<xs:element name="ownered_entity" type="ownered_entity"/>
+			<xs:element name="content" type="xs:string" minOccurs="1"/>
+		</xs:all>
+	</xs:complexType>
+		<xs:complexType name="negotiation_details"><xs:annotation>
+		<xs:documentation>Licenses of type NEGOTIATION are intended only for the Network Zone. Negotiation details for the electronic licensing for the NZ consortia institution members are managed in this section. </xs:documentation>
+	</xs:annotation>
+		<xs:all>
+			<xs:element name="member_code" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The institution code of the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="member_contact_person" type="xs:string" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>An email of the contact person at the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="price" type="xs:float" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>the related price of the consortia member for this license</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="currency" type="xs:string" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>ISO code of the price</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="start_date" type="formatted_date_dype" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>license start date</xs:documentation>
+				</xs:annotation>
+				</xs:element>
+
+			<xs:element name="end_date" type="formatted_date_dype" minOccurs="0" >
+							<xs:annotation>
+					<xs:documentation>license end date</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="renewal_cycle" type="xs:int" minOccurs="0" >
+							<xs:annotation>
+					<xs:documentation>renewal cycle</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="note_list" type="note_list" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>list of notes for the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="attachment_list" type="attachment_list" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>list of attachments for the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="member_order_status" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Deprecated field. the order status at the consortia member: ACTIVE, CLOSED, CANCELLED, DELETED.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="ACTIVE"/>
+						<xs:enumeration value="CLOSED"/>
+						<xs:enumeration value="CANCELLED"/>
+						<xs:enumeration value="DELETED"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+</xs:schema>

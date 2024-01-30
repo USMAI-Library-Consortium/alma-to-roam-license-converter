@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Updated Mar 19, 2013 by Yosi Birenbaum -->
+<xs:schema xmlns="http://com/exlibris/urm/repository/migration/license/xmlbeans" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com/exlibris/urm/repository/migration/license/xmlbeans" elementFormDefault="qualified" attributeFormDefault="unqualified" >
+	<xs:element name="license">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="license_details" type="license_details" minOccurs="1" />
+				<xs:element name="term_list" type="term_list" minOccurs="0" />
+				<xs:element name="note_list" type="note_list" minOccurs="0"/>
+				<xs:element name="attachment_list" type="attachment_list" minOccurs="0"/>
+				<xs:element name="negotiation_details_list" type="negotiation_details_list" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="license_details">
+		<xs:all>
+			<xs:element name="ownered_entity" type="ownered_entity" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Might be used for other entities referenced in this record.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="license_code" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>UNIQUE</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="license_name" type="xs:string" />
+			<xs:element name="license_status" minOccurs="1" default="ACTIVE">
+				<xs:annotation>
+					<xs:documentation>DRAFT, ACTIVE, DELETED, EXPIRED, RETIRED</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="DRAFT"/>
+						<xs:enumeration value="ACTIVE"/>
+						<xs:enumeration value="DELETED"/>
+						<xs:enumeration value="EXPIRED"/>
+						<xs:enumeration value="RETIRED"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="licensor_code" type="xs:string" minOccurs="0"><xs:annotation>
+				<xs:documentation>Licensor Vendor Code</xs:documentation>
+			</xs:annotation></xs:element>
+			<xs:element name="signed_by" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>User Original ID</xs:documentation>
+				</xs:annotation></xs:element>
+			<xs:element name="signed_on" type="formatted_date_dype" minOccurs="0"/>
+			<xs:element name="start_date" type="formatted_date_dype" minOccurs="1"/>
+			<xs:element name="end_date" type="formatted_date_dype" minOccurs="0" />
+			<xs:element name="location" type="xs:string" minOccurs="0"><xs:annotation>
+				<xs:documentation>Value taken from code table LicenseStorageLocation</xs:documentation>
+			</xs:annotation></xs:element>
+			<xs:element name="review_status" minOccurs="1" default="ACCEPTED">
+				<xs:annotation>
+					<xs:documentation>PENDING, ACCEPTED, REJECTED, INREVIEW</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="PENDING"/>
+						<xs:enumeration value="ACCEPTED"/>
+						<xs:enumeration value="REJECTED"/>
+						<xs:enumeration value="INREVIEW"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="URI" type="xs:string" minOccurs="0"/>
+					<xs:element name="type">
+				<xs:annotation>
+					<xs:documentation>LICENSE, ADDENDUM, NEGOTIATION</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="LICENSE"/>
+						<xs:enumeration value="ADDENDUM"/>
+						<xs:enumeration value="NEGOTIATION"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="parent_code" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>When populated, license will be considered as Amendment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="term_list">
+		<xs:sequence>
+			<xs:element name="term" type="term" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="term">
+		<xs:all>
+            <xs:annotation>
+					<xs:documentation>The term element should correspond to a line from Alma code table LicenseTermsAndTypes. The term_code should correspond to a code field of LicenseTermsAndTypes line. The term_value should be defined in according with corresponding codeValue field of LicenseTermsAndTypes line
+					</xs:documentation>
+			</xs:annotation>
+			<xs:element name="term_code" minOccurs="1" >
+			</xs:element>
+			<xs:element name="term_value" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>4 options: YES / NO, PERMITTED / PROHIBITED,  CALENDARDAY / BUSINESSDAY / WEEK or free text - according to codeValue field of LicenseTermsAntTypes Alma code table</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="attachment_list">
+		<xs:sequence>
+			<xs:element name="attachment" type="attachment" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="attachment">
+		<xs:all>
+			<xs:element name="ownered_entity" type="ownered_entity"/>
+			<xs:element name="filename" type="xs:string" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>For license the attachment will be located in license/attachments/{license_code}.zip, under sequential folder. For negotiation_details the attachment will be located in license/negotiations/attachments/{license_code}_{member_code}.zip, under sequential folder.File name should be of format {unique_sequence_folder}/{filename}</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="notes" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="URL" type="xs:string" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ownered_entity"><xs:annotation>
+		<xs:documentation>Every entity in Alma has these DB fields. Non-mandatory. Does not effect functionality.</xs:documentation>
+	</xs:annotation>
+		<xs:all>
+			<xs:element name="creation_date" type="formatted_date_dype" minOccurs="0"/>
+			<xs:element name="modification_date" type="formatted_date_dype" minOccurs="0"/>
+			<xs:element name="created_by" type="xs:string" minOccurs="0"/>
+			<xs:element name="modified_by" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:simpleType name="formatted_date_dype">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[1-2][0-9][0-9][0-9][0-1][0-9][0-3][0-9]"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="negotiation_details_list">
+	    <xs:annotation>
+					<xs:documentation>When populated, license will be considered as NEGOTIATION</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="negotiation_details" type="negotiation_details" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="note_list">
+		<xs:sequence>
+			<xs:element name="note" type="note" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="note">
+		<xs:all>
+			<xs:element name="ownered_entity" type="ownered_entity"/>
+			<xs:element name="content" type="xs:string" minOccurs="1"/>
+		</xs:all>
+	</xs:complexType>
+		<xs:complexType name="negotiation_details"><xs:annotation>
+		<xs:documentation>Licenses of type NEGOTIATION are intended only for the Network Zone. Negotiation details for the electronic licensing for the NZ consortia institution members are managed in this section. </xs:documentation>
+	</xs:annotation>
+		<xs:all>
+			<xs:element name="member_code" type="xs:string" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The institution code of the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="member_contact_person" type="xs:string" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>An email of the contact person at the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="price" type="xs:float" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>the related price of the consortia member for this license</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="currency" type="xs:string" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>ISO code of the price</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="start_date" type="formatted_date_dype" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>license start date</xs:documentation>
+				</xs:annotation>
+				</xs:element>
+
+			<xs:element name="end_date" type="formatted_date_dype" minOccurs="0" >
+							<xs:annotation>
+					<xs:documentation>license end date</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="renewal_cycle" type="xs:int" minOccurs="0" >
+							<xs:annotation>
+					<xs:documentation>renewal cycle</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="note_list" type="note_list" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>list of notes for the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="attachment_list" type="attachment_list" minOccurs="0">
+							<xs:annotation>
+					<xs:documentation>list of attachments for the consortia member</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="member_order_status" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Deprecated field. the order status at the consortia member: ACTIVE, CLOSED, CANCELLED, DELETED.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="ACTIVE"/>
+						<xs:enumeration value="CLOSED"/>
+						<xs:enumeration value="CANCELLED"/>
+						<xs:enumeration value="DELETED"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+</xs:schema>
