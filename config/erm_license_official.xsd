@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This XSD file is the intellectual property of ExLibris. You must comply with their rules for any reuse of the file. -->
 <!-- Updated Mar 19, 2013 by Yosi Birenbaum -->
 <xs:schema xmlns="http://com/exlibris/urm/repository/migration/license/xmlbeans" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com/exlibris/urm/repository/migration/license/xmlbeans" elementFormDefault="qualified" attributeFormDefault="unqualified" >
 	<xs:element name="license">
